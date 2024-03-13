@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #taskInput {
+      width: 60%;
+      padding: 8px;
+      margin: 10px;
+    }
+
+    #taskList {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .taskItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ddd;
+      margin: 5px;
+      padding: 8px;
+    }
+
+    .taskItem.completed {
+      background-color: #d4edda;
+      text-decoration: line-through;
+    }
+
+    .deleteBtn {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+  </style>
+  <title>Lista de Tareas</title>
+</head>
+<body>
+
+  <h1>Lista de Tareas</h1>
+
+  <input type="text" id="taskInput" placeholder="Agregar nueva tarea">
+  <button onclick="addTask()">Agregar</button>
+
+  <ul id="taskList"></ul>
+
+  <script>
+    // Array para almacenar las tareas
+    let tasks = [];
+
+    // Función para agregar una nueva tarea
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskText = taskInput.value.trim();
+
+      if (taskText !== '') {
+        tasks.push({ text: taskText, completed: false });
+        taskInput.value = '';
+        renderTasks();
+      }
+    }
+
+    // Función para eliminar una tarea
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    // Función para marcar/desmarcar como completada una tarea
+    function toggleCompleted(index) {
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+
+    // Función para renderizar la lista de tareas en el HTML
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      tasks.forEach((task, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = `taskItem ${task.completed ? 'completed' : ''}`;
+        listItem.innerHTML = `
+          <span>${task.text}</span>
+          <button class="deleteBtn" onclick="deleteTask(${index})">Eliminar</button>
+          <input type="checkbox" onchange="toggleCompleted(${index})" ${task.completed ? 'checked' : ''}>
+        `;
+        taskList.appendChild(listItem);
+      });
+    }
+
+    // Inicializar la lista de tareas al cargar la página
+    renderTasks();
+  </script>
+
+</body>
+</html>
